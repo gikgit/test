@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="default.css" rel="stylesheet" />
+    <script language="javascript" type="text/javascript">
+        function enableDictation(message) {
+            microphoneButton.classList.remove("disabled");
+            //displayMessage(message);
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+        function disableDictation(message) {
+            microphoneButton.classList.add("disabled");
+            //displayMessage(message);
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+        function displayMessage(text) {
+            dictationStatusArea.textContent = text;
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+        function getEditedText() {
+            var editedText = document.getElementById("dictationTextArea").textContent;
+            return editedText;
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+        function toggleDictation() {
+            if (isHostedInXAMLWebView()) {
+                document.getElementById("dictationTextArea").focus();
+                window.external.notify("ToggleDictationState");
+            }
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+        function closeDictationPanel() {
+            if (isHostedInXAMLWebView()) {
+                window.external.notify("ExitDictation");
+            }
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+        function isHostedInXAMLWebView() {
+            return (window.external != null) && ('notify' in window.external);
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+        window.onload = function() {
+            document.getElementById("dictationTextArea").focus();
+        };
+    </script>
+    <script language="javascript" type="text/javascript">
+        function commitText() {
+            if (isHostedInXAMLWebView()) {
+                window.external.notify("CommitText");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="dictationPanel">
+        <div id="dictationPanelHeader">
+            <button id="microphoneButton" class="disabled" onclick="toggleDictation()">&#xE720;</button>
+            <button id="closeButton" onclick="closeDictationPanel()">&#xE711;</button>
+        </div>
+        <div id="dictationPanelContent">
+            <span id="dictationTextArea" contenteditable="true"></span>
+        </div>
+        <div id="dictationPanelFooter">
+            <span id="dictationStatusArea"></span>
+            <button id="commitButton" onclick="commitText()">Commit</button>
+        </div>
+    </div>
+</body>
+</html>
